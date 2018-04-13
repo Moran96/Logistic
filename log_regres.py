@@ -30,6 +30,31 @@ def grad_ascent(data_mat_in,class_labels):
 		weights = weights + alpha * data_matrix.transpose()*error
 	return weights
 
+#stochastic grad ascent.
+def stoc_grad_ascent0(data_matrix,class_labels):
+	m,n = shape(data_matrix)
+	alpha = 0.01
+	weights = ones(n)
+	for i in range(m):
+		h = sigmoid(sum(data_matrix[i]*weights))
+		error = class_labels[i]-h
+		weights = weights + alpha * error * data_matrix[i]
+	return weights
+
+def stoc_grad_ascent1(data_matrix,class_labels,num_iter=150):
+	m,n = shape(data_matrix)
+	weights = ones(n)
+	for j in range(num_iter):
+		data_index = list(range(m))
+		for i in range(m):
+			alpha = 4/(1.0+j+i)+0.01
+			rand_index = int(random.uniform(0,len(data_index)))
+			h = sigmoid(sum(data_matrix[rand_index]*weights))
+			error = class_labels[rand_index] - h
+			weights = weights + alpha * error * data_matrix[rand_index]
+			del(data_index[rand_index])
+	return weights
+
 #plot data_set and logistic function
 def plot_best_fit(weights):
 	import matplotlib.pyplot as plt
